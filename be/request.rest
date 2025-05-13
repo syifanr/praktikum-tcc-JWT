@@ -1,0 +1,41 @@
+GET http://localhost:3000/notes
+
+###
+POST http://localhost:3000/add-notes
+Content-Type: application/json
+
+{
+    "Title": "Curhat Senin",
+    "Content": "Hari Ini Kuis Mobile Mantap"
+}
+
+###
+PUT http://localhost:3000/edit-notes/1
+Content-Type: application/json
+
+{
+    "Title": "Catatan pertama Harianku",
+    "Content": "Hari Ini Kuliah" 
+}
+
+###
+DELETE http://localhost:3000/delete-notes/2
+
+###
+POST http://localhost:4000/register
+Content-Type: application/json
+
+{
+
+    "username": "admin",
+    "password": "admin"
+}
+
+###
+POST http://localhost:4000/login
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "admin"
+}
