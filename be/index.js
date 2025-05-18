@@ -23,4 +23,4 @@ app.use(express.json());
 app.get("/", (req, res) => res.render("index"));
 app.use(NotesRoute);
 
-app.listen(5000, () => console.log("Server connected"));
+app.listen(3000, () => console.log("Server connected"));
