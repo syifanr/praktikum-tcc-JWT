@@ -1,7 +1,7 @@
-GET http://localhost:3000/notes
+GET http://localhost:5000/notes
 
 ###
-POST http://localhost:3000/add-notes
+POST http://localhost:5000/add-notes
 Content-Type: application/json
 
 {
@@ -10,7 +10,7 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:3000/edit-notes/1
+PUT http://localhost:5000/edit-notes/1
 Content-Type: application/json
 
 {
@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:3000/delete-notes/2
+DELETE http://localhost:5000/delete-notes/2
 
 ###
 POST http://localhost:5000/register
