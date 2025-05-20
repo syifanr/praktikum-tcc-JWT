@@ -1,11 +1,18 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
+import path from "path";
+import { fileURLToPath } from "url";
 import NotesRoute from "./routes/NotesRoute.js";
 import "dotenv/config";
-import cookieParser from "cookie-parser";
+
 
 const app = express();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Middleware
 app.use(cors({
   origin: "http://localhost:3000", 
   credentials: true,
@@ -14,16 +21,25 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json());
 
-
+// Routes API
 app.use(NotesRoute);
 
+// Serve static files dari folder fe
+app.use(express.static(path.join(__dirname, "fe")));
 
+// Route untuk halaman utama
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "fe", "index.html"));
+});
 
+// (Opsional) Route ke halaman login dan register
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "fe", "login.html"));
+});
 
-
-app.use(express.json());
-app.get("/", (req, res) => res.render("index"));
-
+app.get("/register", (req, res) => {
+  res.sendFile(path.join(__dirname, "fe", "register.html"));
+});
 
 const PORT = process.env.PORT || 3000;
 
