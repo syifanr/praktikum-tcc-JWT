@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(NotesRoute);
 
 
-app.set("view engine", "ejs");
+
 
 
 app.use(express.json());
