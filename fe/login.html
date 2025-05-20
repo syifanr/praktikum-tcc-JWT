@@ -79,7 +79,7 @@
       const password = document.getElementById("password").value;
 
       try {
-        const res = await axios.post("http://localhost:3000/login", {
+        const res = await axios.post("https://notes-syifa194-797713225706.us-central1.run.app/", {
           username, password
         }, {
           withCredentials: true // penting untuk mengirim cookie refreshToken

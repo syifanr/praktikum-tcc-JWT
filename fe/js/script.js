@@ -1,64 +1,105 @@
-// Ngambil elemen form
+const BASE_URL = "https://notes-syifa194-797713225706.us-central1.run.app/"; 
+
+// Cek apakah token login sudah ada
+const token = localStorage.getItem("accessToken");
+const refreshToken = localStorage.getItem("refreshToken");
+
+if (!token || !refreshToken) {
+  alert("Kamu belum login. Silakan login dulu.");
+  window.location.href = "login.html"; 
+}
+
+// === SETUP AXIOS JWT ===
+const axiosJWT = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
+
+// Interceptor untuk refresh token otomatis
+axiosJWT.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    if (
+      error.response &&
+      error.response.status === 403 &&
+      !originalRequest._retry
+    ) {
+      originalRequest._retry = true;
+
+      try {
+        const response = await axios.post(`${BASE_URL}/refresh`, {
+          refreshToken: localStorage.getItem("refreshToken"),
+        });
+
+        const newAccessToken = response.data.accessToken;
+        localStorage.setItem("accessToken", newAccessToken);
+        axiosJWT.defaults.headers.Authorization = `Bearer ${newAccessToken}`;
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+
+        return axiosJWT(originalRequest);
+      } catch (refreshError) {
+        alert("Session habis. Silakan login ulang.");
+        localStorage.clear();
+        window.location.href = "login.html";
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+// === HANDLE FORM SUBMIT ===
 const formulir = document.querySelector("form");
 
-// Bikin trigger event submit pada elemen form
-formulir.addEventListener("submit", (e) => {
-  e.preventDefault();
+  formulir.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-  // Ngambil elemen input
-  const elemen_Title = document.querySelector("#Title");
-  const elemen_Content = document.querySelector("#Content");
+    const elemen_Title = document.querySelector("#Title");
+    const elemen_Content = document.querySelector("#Content");
 
-  // Ngambil value dari elemen input
-  const Title = elemen_Title.value;
-  const Content = elemen_Content.value;
+    const Title = elemen_Title.value;
+    const Content = elemen_Content.value;
+    const id = elemen_Title.dataset.id;
 
-  const id = elemen_Title.dataset.id; // <- Khusus edit
-
-  // Ngecek apakah harus POST atau PUT
-  // Kalo id kosong, jadinya POST
-  if (id == "") {
-    // Tambah notes
-    axios
-      .post(`${BASE_URL}/add-notes`, { Title, Content })
+  if (id === "") {
+    axiosJWT
+      .post("/add-notes", { Title, Content })
       .then(() => {
-        // bersihin formnya
-        elemen_Title.value = "";
-        elemen_Content.value = "";
-
-        // manggil fungsi get  biar datanya di-refresh
+          elemen_Title.value = "";
+          elemen_Content.value = "";
         getNotes();
       })
-      .catch((error) => console.log(error.message)); // <- Kalo ada error
+      .catch((error) => console.log(error.message));
   } else {
-    axios
-      .put(`${BASE_URL}/edit-notes/${id}`, {  Title, Content })
-      .then(() => {
-        // bersihin formnya
-        elemen_Title.dataset.id = "";
-        elemen_Title.value = "";
-        elemen_Content.value = "";
-
-        // manggil fungsi get  biar datanya direfresh
-        getNotes();
-      })
-      .catch((error) => console.log(error)); // <- Kalo ada error
+    axiosJWT
+      .put(`/edit-notes/${id}`, { Title, Content })
+        .then(() => {
+          elemen_Title.dataset.id = "";
+          elemen_Title.value = "";
+          elemen_Content.value = "";
+          getNotes();
+        })
+      .catch((error) => console.log(error));
   }
 });
 
-// GET 
+// === GET NOTES ===
 async function getNotes() {
   try {
-    const { data } = await axios.get(`${BASE_URL}/notes`);
+    const { data } = await axiosJWT.get("/notes");
 
     const table = document.querySelector("#table-notes");
     let tampilan = "";
     let no = 1;
 
-    for (const notes of await data) {
+    for (const notes of data) {
       tampilan += tampilkanNotes(no, notes);
       no++;
     }
+
     table.innerHTML = tampilan;
     hapusNotes();
     editNotes();
@@ -67,6 +108,7 @@ async function getNotes() {
   }
 }
 
+// === TAMPILKAN NOTES ===
 function tampilkanNotes(no, notes) {
   return `
     <tr>
@@ -79,46 +121,56 @@ function tampilkanNotes(no, notes) {
   `;
 }
 
+// === HAPUS NOTES ===
 function hapusNotes() {
   const kumpulan_tombol_hapus = document.querySelectorAll(".btn-hapus");
 
   kumpulan_tombol_hapus.forEach((btn) => {
     btn.addEventListener("click", () => {
       const id = btn.dataset.id;
-      axios
-        .delete(`${BASE_URL}/delete-notes/${id}`)
+      axiosJWT
+        .delete(`/delete-notes/${id}`)
         .then(() => getNotes())
         .catch((error) => console.log(error));
     });
   });
 }
 
+// === EDIT NOTES ===
 function editNotes() {
   const kumpulan_tombol_edit = document.querySelectorAll(".btn-edit");
 
-  kumpulan_tombol_edit.forEach((tombol_edit) => {
-    tombol_edit.addEventListener("click", () => {
-      // Ngambil value yg ada di form
-      const id = tombol_edit.dataset.id;
-      const Title =
-        tombol_edit.parentElement.parentElement.querySelector(
-          ".Title"
-        ).innerText;
-      const Content =
-        tombol_edit.parentElement.parentElement.querySelector(
-          ".Content"
-        ).innerText;
+    kumpulan_tombol_edit.forEach((tombol_edit) => {
+      tombol_edit.addEventListener("click", () => {
+        const id = tombol_edit.dataset.id;
+        const Title =
+          tombol_edit.parentElement.parentElement.querySelector(
+            ".Title"
+          ).innerText;
+        const Content =
+          tombol_edit.parentElement.parentElement.querySelector(
+            ".Content"
+          ).innerText;
 
-      // Ngambil [elemen] input
-      const elemen_Title = document.querySelector("#Title");
-      const elemen_Content = document.querySelector("#Content");
+          const elemen_Title = document.querySelector("#Title");
+          const elemen_Content = document.querySelector("#Content");
 
-      // Masukkin value yang ada di baris yang dipilih ke form
-      elemen_Title.dataset.id = id;
-      elemen_Title.value = Title;
-      elemen_Content.value = Content;
+          elemen_Title.dataset.id = id;
+          elemen_Title.value = Title;
+          elemen_Content.value = Content;
+      });
     });
+}
+
+// === LOGOUT FUNCTION ===
+const logoutBtn = document.querySelector("#logout");
+
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", () => {
+    localStorage.clear();
+    window.location.href = "login.html"; // ganti sesuai halaman login kamu
   });
 }
 
+// === GET NOTES ON PAGE LOAD ===
 getNotes();
