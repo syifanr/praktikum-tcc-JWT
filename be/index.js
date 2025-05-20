@@ -27,14 +27,17 @@ app.use(NotesRoute);
 // Serve static files dari folder fe
 app.use(express.static(path.join(__dirname, "fe")));
 
-// Route untuk halaman utama
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "fe", "index.html"));
-});
+// // Route untuk halaman utama
+// app.get("/", (req, res) => {
+//   res.sendFile(path.join(__dirname, "fe", "index.html"));
+// });
 
-// (Opsional) Route ke halaman login dan register
-app.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "fe", "login.html"));
+// // (Opsional) Route ke halaman login dan register
+// app.get("/login", (req, res) => {
+//   res.sendFile(path.join(__dirname, "fe", "login.html"));
+// });
+app.get("/", (req, res) => {
+  res.redirect("/register");
 });
 
 app.get("/register", (req, res) => {
