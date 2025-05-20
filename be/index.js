@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 const app = express();
 
 app.use(cors({
-  origin: "http://localhost:5000", 
+  origin: "http://localhost:3000", 
   credentials: true,
 }));
 
@@ -25,4 +25,6 @@ app.use(express.json());
 app.get("/", (req, res) => res.render("index"));
 
 
-app.listen(5000, () => console.log("Server connected"));
+app.listen(PORT, () => {
+  console.log(`Server is listening on port ${PORT}`);
+});
