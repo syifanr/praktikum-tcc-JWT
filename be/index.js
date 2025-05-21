@@ -23,32 +23,14 @@ app.use(cors({
 }));
 
 
-app.use(cookieParser());
-app.use(express.json());
+  app.use(cookieParser());
+  app.use(express.json());
 
-// Routes API
-app.use(NotesRoute);
+  // Routes API
+  app.use(NotesRoute);
 
-// Route untuk halaman utama
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "fe", "register.html"));
-});
+  const PORT = process.env.PORT || 3000;
 
-// (Opsional) Route ke halaman login dan register
-app.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "fe", "login.html"));
-});
-
-app.get("/register", (req, res) => {
-  res.sendFile(path.join(__dirname, "fe", "register.html"));
-});
-
-// Serve static files dari folder fe (pindah ke bawah)
-app.use(express.static(path.join(__dirname, "fe")));
-
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`);
-});
+  app.listen(PORT, () => {
+    console.log(`Server is listening on port ${PORT}`);
+  });
