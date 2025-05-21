@@ -1,4 +1,4 @@
-// js/axios.js
+
 
 
 const baseURL = "https://notes-syifa194-797713225706.us-central1.run.app";
@@ -8,6 +8,7 @@ const axiosJWT = axios.create({
   baseURL: baseURL,
   withCredentials: true
 });
+
 
 
 // Interceptor untuk refresh token otomatis
