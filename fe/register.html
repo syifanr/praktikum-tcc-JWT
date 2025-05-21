@@ -59,7 +59,17 @@
     <script src="./js/axios.js"></script>
     <script src="js/script.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    
+  
+    <h1>Registrasi Pengguna</h1>
+      <form id="registerForm">
+        <label for="username">Username</label>
+        <input id="username" type="text" required placeholder="Masukkan Username" />
+
+        <label for="password">Password</label>
+        <input id="password" type="password" required placeholder="Masukkan Password" />
+
+        <button type="submit">Daftar</button>
+      </form>
   <script>
     document.getElementById("registerForm").addEventListener("submit", async (e) => {
       e.preventDefault();
