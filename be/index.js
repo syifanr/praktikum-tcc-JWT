@@ -14,7 +14,7 @@ const __dirname = path.dirname(__filename);
 
 // Middleware
 app.use(cors({
-  origin: "http://localhost:3000", 
+  origin: "https://notes-syifa194-797713225706.us-central1.run.app", 
   credentials: true,
 }));
 
