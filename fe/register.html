@@ -3,23 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Register - Notes</title>
-</head>
-<body>
-  <div class="container">
-    <h1>Registrasi Pengguna</h1>
-    <form id="registerForm">
-      <label for="username">Username</label>
-      <input id="username" type="text" required placeholder="Masukkan Username" />
-
-      <label for="password">Password</label>
-      <input id="password" type="password" required placeholder="Masukkan Password" />
-
-      <button type="submit">Daftar</button>
-    </form>
-    <p>Sudah punya akun? <a href="login.html">Login di sini</a></p>
-  </div>
-
+  <title>Register</title>
   <style>
     body {
       background: #e3f2fd;
@@ -84,11 +68,13 @@
 
       try {
         const res = await axios.post("https://notes-syifa194-797713225706.us-central1.run.app/", {
-          username, password
+          username,
+          password
         });
         alert(res.data.message);
         window.location.href = "login.html";
       } catch (err) {
+        console.error(err);
         alert(err.response?.data?.message || "Registrasi gagal");
       }
     });

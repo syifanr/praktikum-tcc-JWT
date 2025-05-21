@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login - Notes</title>
+  <title>Login </title>
 </head>
 <body>
   <div class="container">
@@ -83,13 +83,15 @@
 
       try {
         const res = await axios.post("https://notes-syifa194-797713225706.us-central1.run.app/", {
-          username, password
+          username,
+          password
         }, {
-          withCredentials: true // penting untuk mengirim cookie refreshToken
+          withCredentials: true
         });
 
         // Simpan accessToken jika perlu (bisa juga pakai localStorage atau sessionStorage)
         localStorage.setItem("accessToken", res.data.accessToken);
+        localStorage.setItem("refreshToken", res.data.refreshToken);
         alert("Login berhasil");
 
         // Redirect ke halaman dashboard atau lainnya
@@ -101,3 +103,6 @@
   </script>
 </body>
 </html>
+
+
+
