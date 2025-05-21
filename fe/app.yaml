@@ -14,13 +14,16 @@ handlers:
   - url: /index.html
     static_files: index.html
     upload: index.html
-
-  # Serve file js
+    
   - url: /js/(.*)
     static_files: js/\1
-    upload:
-      js/(.*)
+    upload: js/(.*)
 
+  #  Tangani root dengan redirect ke register 
+  - url: /
+    redirect: /register.html
+
+  #  Hapus atau pindahkan ke paling bawah SEBAGAI BACKUP SAJA
   - url: /(.*)
     static_files: \1
     upload: (.*)
