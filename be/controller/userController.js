@@ -2,6 +2,22 @@ import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+// GET ALL USERS
+export async function getUsers(req, res) {
+  try {
+    const users = await User.findAll({
+      attributes: ["id_user", "username"], 
+    });
+
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({
+      status: "Error",
+      message: error.message,
+    });
+  }
+}
+
 // REGISTER
 async function register(req, res) {
   try {
