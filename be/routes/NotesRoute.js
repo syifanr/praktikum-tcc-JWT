@@ -18,9 +18,9 @@ import { verifyToken } from "../middleware/VerifyToken.js";
 const router =  express.Router()
 
 router.get("/notes", getNotes);
-router.post("/add-notes", createNotes);
-router.put("/edit-notes/:id", updateNotes);
-router.delete("/delete-notes/:id", deleteNotes);
+router.post("/add-notes",verifyToken, createNotes);
+router.put("/edit-notes/:id",verifyToken, updateNotes);
+router.delete("/delete-notes/:id", verifyToken, deleteNotes);
 
 //endpoint table user
 router.post("/login", login);

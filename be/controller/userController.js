@@ -59,7 +59,7 @@ async function login(req, res) {
     const { password: _, refresh_token: __, ...safeUserData } = userPlain;
 
     const accessToken = jwt.sign(safeUserData, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: "30s",
+      expiresIn: "1200s",
     });
 
     const refreshToken = jwt.sign(safeUserData, process.env.REFRESH_TOKEN_SECRET, {
