@@ -7,19 +7,13 @@ handlers:
     static_files: index.html
     upload: index.html
 
-  - url: /register.html
-    static_files: register.html
-    upload: register.html
-
-  - url: /login.html
-    static_files: login.html
-    upload: login.html
-
+    
   # Serve file js
   - url: /js/(.*)
     static_files: js/\1
     upload:
       js/(.*)
+
   - url: /(.*)
     static_files: \1
     upload: (.*)
