@@ -1,21 +1,36 @@
-runtime: python39  # Menggunakan runtime standar untuk hosting HTML statis
-service: fe-notessyifa  # Nama layanan App Engine, bisa diubah sesuai kebutuhan
-instance_class: F1  # Kelas instance untuk App Engine (F1 adalah kelas standar yang ringan)
+runtime: python39
+service: fe-notessyifa
+instance_class: F1
 
 handlers:
+  # Halaman login
+  - url: /login.html
+    static_files: login.html
+    upload: login.html
+
+  # Halaman register
+  - url: /register.html
+    static_files: register.html
+    upload: register.html
+
+  # Halaman utama / dashboard
   - url: /index.html
     static_files: index.html
     upload: index.html
 
-    
-  # Serve file js
+  # JS files
   - url: /js/(.*)
     static_files: js/\1
-    upload:
-      js/(.*)
+    upload: js/(.*)
 
+  # Root route arahkan ke register.html (opsional)
+  - url: /
+    static_files: register.html
+    upload: register.html
+
+  # Backup handler (jika ada file tambahan)
   - url: /(.*)
     static_files: \1
     upload: (.*)
 
-default_expiration: "1h"  # Waktu cache default
+default_expiration: "1h"
