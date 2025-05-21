@@ -20,7 +20,7 @@ export const refreshToken = async (req, res) => {
     });
 
     // Kalo ga ketemu
-    if (!user.refresh_token) return res.sendStatus(403);
+    if (!user) return res.sendStatus(403);
     // Kalo ketemu
     else
       jwt.verify(
@@ -35,7 +35,7 @@ export const refreshToken = async (req, res) => {
             safeUserData,
             process.env.ACCESS_TOKEN_SECRET,
             {
-              expiresIn: "30s",
+              expiresIn: "1200s",
             }
           );
           res.json({ accessToken });
