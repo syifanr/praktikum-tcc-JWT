@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Register</title>
+  <title>Register </title>
   <style>
     body {
       background: #e3f2fd;
@@ -54,22 +55,24 @@
       text-decoration: none;
     }
   </style>
-
-   <script src="js/utils.js"></script>
-    <script src="./js/axios.js"></script>
-    <script src="js/script.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  
+</head>
+<body>
+  <div class="container">
     <h1>Registrasi Pengguna</h1>
-      <form id="registerForm">
-        <label for="username">Username</label>
-        <input id="username" type="text" required placeholder="Masukkan Username" />
+    <form id="registerForm">
+      <label for="username">Username</label>
+      <input id="username" type="text" required placeholder="Masukkan Username" />
 
-        <label for="password">Password</label>
-        <input id="password" type="password" required placeholder="Masukkan Password" />
+      <label for="password">Password</label>
+      <input id="password" type="password" required placeholder="Masukkan Password" />
 
-        <button type="submit">Daftar</button>
-      </form>
+      <button type="submit">Daftar</button>
+    </form>
+    <p>Sudah punya akun? <a href="login.html">Login di sini</a></p>
+  </div>
+
+  <!-- Pastikan urutan script benar -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
     document.getElementById("registerForm").addEventListener("submit", async (e) => {
       e.preventDefault();

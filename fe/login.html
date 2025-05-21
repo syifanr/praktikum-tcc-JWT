@@ -1,9 +1,11 @@
+[media pointer="file-service://file-DDyKEdhVBdkosxcMipGQuf"]
+cara membuat tampilan html nya login disebelah kiri lalu kanan ada gambar buku agar seperti perpustakaan beneran yang nantinya gambar bisa disimpan di cloud storage
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login </title>
+  <title>Login - Perpustakaan</title>
 </head>
 <body>
   <div class="container">
@@ -94,11 +96,12 @@
         localStorage.setItem("refreshToken", res.data.refreshToken);
         alert("Login berhasil");
 
-        // Redirect ke halaman dashboard atau lainnya
-        window.location.href = "index.html";
-      } catch (err) {
-        alert(err.response?.data?.message || "Login gagal");
-      }
+          // Redirect ke halaman dashboard atau lainnya
+          window.location.href = "index.html";
+        } catch (err) {
+          alert(err.response?.data?.message || "Login gagal");
+        }
+
     });
   </script>
 </body>
