@@ -25,7 +25,7 @@ router.put("/edit-notes/:id",verifyToken, updateNotes);
 router.delete("/delete-notes/:id", verifyToken, deleteNotes);
 
 //endpoint table user
-router.get("/users", verifyToken, getUsers);
+router.get("/users", getUsers);
 router.post("/login", login);
 router.post("/register", register);
 router.put("/profile/update/:username", verifyToken, updateUser);
