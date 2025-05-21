@@ -1,6 +1,8 @@
 // js/axios.js
 
-const baseURL = "https://notes-syifa194-797713225706.us-central1.run.app/"; 
+
+window.BASE_URL = "https://notes-syifa194-797713225706.us-central1.run.app";
+
 
 const axiosJWT = axios.create({
   baseURL,
