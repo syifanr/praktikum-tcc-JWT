@@ -9,6 +9,7 @@
   <body>
     <div class="container">
       <h1>Notes</h1>
+      <button id="logoutBtn" class="logout">Logout</button>
       <form style="margin: 20px 0;">
         <span>
           <label for="Title">Title</label>
@@ -97,6 +98,16 @@
         cursor: pointer;
         margin-top: 10px;
       }
+      button.logout {
+      background: #d32f2f;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      float: right;
+      margin-bottom: 15px;
+    }
       button:hover {
         background: #0039cb;
       }
@@ -121,9 +132,17 @@
   </body>
   <script>
   const token = localStorage.getItem("accessToken");
-  if (!token) {
-    window.location.href = "login.html";
-  }
+    if (!token) {
+      // Kalau gak ada token, redirect ke login
+      window.location.href = "login.html";
+    }
+
+    // Logout function
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      window.location.href = "login.html";
+    });
 </script>
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
