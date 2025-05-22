@@ -1,60 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Notes</title>
-  </head>
-  <body>
-    <div class="container">
-      <h1>Notes</h1>
-      <button id="logoutBtn" class="logout">Logout</button>
-      <form style="margin: 20px 0;">
-        <span>
-          <label for="Title">Title</label>
-          <input
-            data-id
-            id="Title"
-            type="text"
-            placeholder="Input Title"
-            required
-          />
-        </span>
-        <span style="margin-left: 1rem">
-          <label for="Content">Content</label>
-          <input
-            data-id
-            id="Content"
-            type="text"
-            placeholder="Input Content"
-            required
-          />
-        </span>
-        <button type="submit">Save</button>
-      </form>
-
-      <main style="margin-top: 1rem">
-        <table>
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Title</th>
-              <th>Content</th>
-              <th colspan="2">Option</th>
-            </tr>
-          </thead>
-          <tbody id="table-notes">
-            <tr>
-              <td><button class="btn-edit">Edit</button></td>
-              <td><button class="btn-delete">Delete</button></td>
-            </tr>
-          </tbody>
-        </table>
-      </main>
-    </div>
-
-    
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -99,15 +48,15 @@
         margin-top: 10px;
       }
       .logout {
-      background: #d32f2f;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 5px;
-      cursor: pointer;
-      float: right;
-      margin-bottom: 15px;
-    }
+        background: #d32f2f;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        float: right;
+        margin-bottom: 15px;
+      }
       button:hover {
         background: #0039cb;
       }
@@ -121,28 +70,162 @@
         width: 100%;
         border-collapse: collapse;
       }
-      table, th, td {
+      table,
+      th,
+      td {
         border: 1px solid #ccc;
       }
-      th, td {
+      th,
+      td {
         padding: 10px;
         text-align: left;
       }
     </style>
-  </body>
-  <script>
-  const token = localStorage.getItem("accessToken");
-    if (!token) {
-      // Kalau gak ada token, redirect ke login
-      window.location.href = "login.html";
-    }
+  </head>
+  <body>
+    <div class="container">
+      <h1>Notes</h1>
+      <button id="logoutBtn" class="logout">Logout</button>
 
-    // Logout function
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      window.location.href = "login.html";
-    });
-  </script>
-</body>
+      <form id="noteForm" style="margin: 20px 0;">
+        <span>
+          <label for="Title">Title</label>
+          <input
+            id="Title"
+            type="text"
+            placeholder="Input Title"
+            required
+          />
+        </span>
+        <span style="margin-left: 1rem">
+          <label for="Content">Content</label>
+          <input
+            id="Content"
+            type="text"
+            placeholder="Input Content"
+            required
+          />
+        </span>
+        <button type="submit">Save</button>
+      </form>
+
+      <main style="margin-top: 1rem">
+        <table>
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Title</th>
+              <th>Content</th>
+              <th>Option</th>
+            </tr>
+          </thead>
+          <tbody id="table-notes"></tbody>
+        </table>
+      </main>
+    </div>
+
+    <script>
+      const BACKEND_URL = 'https://notes-syifa194-797713225706.us-central1.run.app';
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        window.location.href = 'login.html';
+      }
+
+      // Logout
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        window.location.href = 'login.html';
+      });
+
+      const tableNotes = document.getElementById('table-notes');
+      const noteForm = document.getElementById('noteForm');
+
+      // Fungsi fetch notes dan render tabel
+      async function fetchNotes() {
+        try {
+          const res = await fetch(BACKEND_URL + '/notes', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          if (!res.ok) throw new Error('Failed to fetch notes');
+          const notes = await res.json();
+
+          tableNotes.innerHTML = '';
+          notes.forEach((note, i) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${i + 1}</td>
+              <td>${note.judul}</td>
+              <td>${note.isi}</td>
+              <td>
+                <button class="btn-delete" data-id="${note.id}">Delete</button>
+              </td>
+            `;
+            tableNotes.appendChild(tr);
+          });
+        } catch (err) {
+          console.error(err);
+          alert('Gagal mengambil data notes');
+        }
+      }
+
+      // Load data notes saat halaman dibuka
+      fetchNotes();
+
+      // Submit form tambah notes
+      noteForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const title = document.getElementById('Title').value.trim();
+        const content = document.getElementById('Content').value.trim();
+
+        if (!title || !content) {
+          alert('Title dan Content wajib diisi');
+          return;
+        }
+
+        try {
+          const res = await fetch(BACKEND_URL + '/add-notes', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ judul: title, isi: content })
+          });
+
+          if (!res.ok) throw new Error('Gagal menambah note');
+
+          // Kosongkan input form
+          noteForm.reset();
+          // Reload tabel
+          fetchNotes();
+        } catch (err) {
+          console.error(err);
+          alert('Gagal menambah note');
+        }
+      });
+
+      // Delegate event klik tombol delete
+      tableNotes.addEventListener('click', async (e) => {
+        if (e.target.classList.contains('btn-delete')) {
+          const id = e.target.dataset.id;
+          if (!confirm('Yakin mau hapus note ini?')) return;
+
+          try {
+            const res = await fetch(BACKEND_URL + '/delete-notes/' + id, {
+              method: 'DELETE',
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            });
+            if (!res.ok) throw new Error('Gagal menghapus note');
+            fetchNotes();
+          } catch (err) {
+            console.error(err);
+            alert('Gagal menghapus note');
+          }
+        }
+      });
+    </script>
+  </body>
 </html>
