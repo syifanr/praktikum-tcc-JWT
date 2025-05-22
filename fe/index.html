@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta http-equiv="refresh" content="0; url=register.html" />
+    
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Notes</title>
@@ -119,6 +119,13 @@
       }
     </style>
   </body>
+  <script>
+  const token = localStorage.getItem("accessToken");
+  if (!token) {
+    window.location.href = "login.html";
+  }
+</script>
+
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="js/utils.js"></script>
     <script src="./js/axios.js"></script>
